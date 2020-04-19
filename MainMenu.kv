@@ -1,0 +1,20 @@
+<MainMenu>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 50
+        size_hint: 1, 0.8
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        Image:
+            source: 'sources/fireman.png'
+        Button:
+            size_hint: 0.5, 0.5
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            text: 'Dodaj raport'
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'choice'
+        Button:
+            size_hint: 0.5, 0.5
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            text: 'Wyjdź'
+            on_press: app.stop()

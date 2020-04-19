@@ -1,0 +1,80 @@
+<ReportScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        size_hint: 1, 0.8
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint: 0.6, 1
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            GridLayout:
+                cols: 1
+                spacing: 30
+                size_hint: (1, None)
+                height: self.minimum_height
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Miejscowość'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Ulica'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Numer budynku/lokalu'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Data'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Sprzęt'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Załoga'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Opis wezwania'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Wynik akcji'
+                    multiline: False
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 50
+            size_hint: 0.5, 1
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            Button:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                text: 'Gotowe'
+            Button:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                text: 'Anuluj'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'choice'
