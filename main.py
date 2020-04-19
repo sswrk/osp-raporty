@@ -1,6 +1,8 @@
 from MainMenu import MainMenu
-from ReportScreen import ReportScreen
 from ReportChoiceScreen import ReportChoiceScreen
+from ReportScreen import ReportScreen
+from MonthlyReportScreen import MonthlyReportScreen
+from YearlyReportScreen import YearlyReportScreen
 
 import kivy
 kivy.require('1.1.1')  # replace with your current kivy version !
@@ -14,6 +16,8 @@ sm = ScreenManager()
 sm.add_widget(MainMenu(name='menu'))
 sm.add_widget(ReportChoiceScreen(name='choice'))
 sm.add_widget(ReportScreen(name='report'))
+sm.add_widget(MonthlyReportScreen(name='monthly'))
+sm.add_widget(YearlyReportScreen(name='yearly'))
 
 class MainApp(App):
 
