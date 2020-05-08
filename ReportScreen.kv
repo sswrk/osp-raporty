@@ -18,44 +18,98 @@
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Miejsce'
+                    hint_text: 'Data wyjazdu'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Rodzaj zdarzenia'
+                    multiline: True
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Godzina wyjazdu'
                     multiline: False
                 TextInput:
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Data'
+                    hint_text: 'Na miejscu'
                     multiline: False
                 TextInput:
                     size: 200, 100
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Przyczyna'
+                    hint_text: 'Miejsce zdarzenia'
+                    multiline: True
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Dowódca sekcji'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Dowódca akcji'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Kierowca'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Sprawca'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Poszkodowany'
                     multiline: False
                 TextInput:
                     size: 200, 100
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Załoga'
+                    hint_text: 'Sekcja'
                     multiline: True
                 TextInput:
-                    size: 200, 100
+                    size: 200, 200
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Sprzęt'
+                    hint_text: 'Szczegóły zdarzenia: jakiego użyto sprzętu, ilość jednostek, rodzaj, czy na miejscu była policja, pogotowie, czy były osoby ranne, itp.'
                     multiline: True
                 TextInput:
-                    size: 200, 100
+                    size: 200, 30
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Opis akcji'
-                    multiline: True
+                    hint_text: 'Godz. zakończ.'
+                    multiline: False
                 TextInput:
-                    size: 200, 100
+                    size: 200, 30
                     focus: True
                     size_hint: 1, None
-                    hint_text: 'Uwagi'
-                    multiline: True
+                    hint_text: 'Godz. w remizie'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Stan licznika'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'km do miejsca zdarzenia'
+                    multiline: False
         BoxLayout:
             orientation: 'horizontal'
             spacing: 50
@@ -71,4 +125,4 @@
                 text: 'Anuluj'
                 on_press:
                     root.manager.transition.direction = 'right'
-                    root.manager.current = 'choice'
+                    root.manager.current = 'menu'

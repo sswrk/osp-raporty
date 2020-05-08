@@ -14,10 +14,10 @@ Window.clearcolor = (0, 0.5, 1, 0)
 
 sm = ScreenManager()
 sm.add_widget(MainMenu(name='menu'))
-sm.add_widget(ReportChoiceScreen(name='choice'))
+#sm.add_widget(ReportChoiceScreen(name='choice'))
 sm.add_widget(ReportScreen(name='report'))
-sm.add_widget(MonthlyReportScreen(name='monthly'))
-sm.add_widget(YearlyReportScreen(name='yearly'))
+#sm.add_widget(MonthlyReportScreen(name='monthly'))
+#sm.add_widget(YearlyReportScreen(name='yearly'))
 
 class MainApp(App):
 
