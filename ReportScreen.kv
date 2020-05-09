@@ -15,12 +15,14 @@
                 size_hint: (1, None)
                 height: self.minimum_height
                 TextInput:
+                    id: lp
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'L.P'
                     multiline: False
                 TextInput:
+                    id: departure_date
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
@@ -28,60 +30,70 @@
                     multiline: False
                     text: root.currentdate
                 TextInput:
+                    id: incident_type
                     size: 200, 100
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Rodzaj zdarzenia'
                     multiline: True
                 TextInput:
+                    id: departure_time
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Godzina wyjazdu'
                     multiline: False
                 TextInput:
+                    id: arrived
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Na miejscu'
                     multiline: False
                 TextInput:
+                    id: incident_place
                     size: 200, 100
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Miejsce zdarzenia'
                     multiline: True
                 TextInput:
+                    id: section_commander
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Dowódca sekcji'
                     multiline: False
                 TextInput:
+                    id: action_commander
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Dowódca akcji'
                     multiline: False
                 TextInput:
+                    id: driver
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Kierowca'
                     multiline: False
                 TextInput:
+                    id: causedby
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Sprawca'
                     multiline: False
                 TextInput:
+                    id: victim
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Poszkodowany'
                     multiline: False
                 TextInput:
+                    id: section
                     size: 200, 100
                     focus: True
                     size_hint: 1, None
@@ -95,12 +107,22 @@
                     hint_text: 'Szczegóły zdarzenia: jakiego użyto sprzętu, ilość jednostek, rodzaj, czy na miejscu była policja, pogotowie, czy były osoby ranne, itp.'
                     multiline: True
                 TextInput:
+                    id: return_date
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Data powrotu'
+                    multiline: False
+                    text: root.currentdate
+                TextInput:
+                    id: ended_time
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Godz. zakończ.'
                     multiline: False
                 TextInput:
+                    id: return_time
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
@@ -108,12 +130,14 @@
                     multiline: False
                     text: root.currenttime
                 TextInput:
+                    id: meter_reading
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
                     hint_text: 'Stan licznika'
                     multiline: False
                 TextInput:
+                    id: km_to_incident_place
                     size: 200, 30
                     focus: True
                     size_hint: 1, None
@@ -129,8 +153,27 @@
                 pos_hint: {'center_x': .5, 'center_y': .5}
                 text: 'Gotowe'
                 on_press:
+                    root.lp = lp.text
+                    root.departure_time = departure_time.text
+                    root.departure_date = departure_date.text
+                    root.arrived = arrived.text
+                    root.incident_place = incident_place.text
+                    root.incident_type = incident_type.text
+                    root.section_commander = section_commander.text
+                    root.action_commander = action_commander.text
+                    root.driver = driver.text
+                    root.causedby = causedby.text
+                    root.victim = victim.text
+                    root.section = section.text
                     root.details = details.text
+                    root.return_date = return_date.text
+                    root.ended_time = ended_time.text
+                    root.return_time = return_time.text
+                    root.meter_reading = meter_reading.text
+                    root.km_to_incident_place = km_to_incident_place.text
                     root.generatePDF()
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'menu'
             Button:
                 size_hint: 0.5, 0.5
                 pos_hint: {'center_x': .5, 'center_y': .5}
