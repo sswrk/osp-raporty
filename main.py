@@ -1,8 +1,11 @@
+from kivy.properties import StringProperty
+
 from MainMenu import MainMenu
 from ReportChoiceScreen import ReportChoiceScreen
 from ReportScreen import ReportScreen
 from MonthlyReportScreen import MonthlyReportScreen
 from YearlyReportScreen import YearlyReportScreen
+from datetime import date
 
 import kivy
 kivy.require('1.1.1')  # replace with your current kivy version !
@@ -20,10 +23,8 @@ sm.add_widget(ReportScreen(name='report'))
 #sm.add_widget(YearlyReportScreen(name='yearly'))
 
 class MainApp(App):
-
     def build(self):
         return sm
-
 
 if __name__ == '__main__':
     MainApp().run()
