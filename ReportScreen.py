@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from xhtml2pdf import pisa
+import os
 
 with open('ReportScreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
@@ -32,6 +33,7 @@ class ReportScreen(Screen):
     return_time = ""
     meter_reading = ""
     km_to_incident_place = ""
+    font = os.path.abspath("resources/Arial.ttf")
 
     def __init__(self, **kwargs):
         self.currentdate = date.today().strftime("%d.%m.%Y")
@@ -41,7 +43,8 @@ class ReportScreen(Screen):
     def generatePDF(self):
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template("resources/template.html")
-        template_vars = {"description": self.description,
+        template_vars = {"font": self.font,
+			 "description": self.description,
                          "lp": self.lp,
                          "departure_date": self.departure_date,
                          "departure_time": self.departure_time,
@@ -65,5 +68,5 @@ class ReportScreen(Screen):
         result = open("raport.pdf", "w+b")
         result_html = open("raport.html", "w", encoding='utf-8')
         result_html.write(html_out)
-        pisa.CreatePDF(html_out.encode('utf-8'), dest=result, path='resources')
+        pisa.CreatePDF(html_out.encode('utf-8'), path='__dummy__', dest=result, encoding='utf-8')
         result.close()
