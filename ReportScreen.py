@@ -6,8 +6,11 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from xhtml2pdf import pisa
 import os
+from android.permissions import request_permissions, Permission
+request_permissions([Permission.WRITE_EXTERNAL_STORAGE,
+                     Permission.READ_EXTERNAL_STORAGE])
 
-with open('ReportScreen.kv', encoding='utf8') as f:
+with open('reportscreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
 
 class ReportScreen(Screen):
@@ -34,6 +37,7 @@ class ReportScreen(Screen):
     meter_reading = ""
     km_to_incident_place = ""
     font = os.path.abspath("resources/Arial.ttf")
+    folder = '/storage/emulated/0/'
 
     def __init__(self, **kwargs):
         self.currentdate = date.today().strftime("%d.%m.%Y")
@@ -65,8 +69,8 @@ class ReportScreen(Screen):
                          "km_to_incident_place": self.km_to_incident_place}
 
         html_out = template.render(template_vars)
-        result = open("raport.pdf", "w+b")
-        result_html = open("raport.html", "w", encoding='utf-8')
+        result = open(os.path.join(self.folder,'raport.pdf'), "w+b")
+        result_html = open(os.path.join(self.folder,'raport.html'), "w", encoding='utf-8')
         result_html.write(html_out)
         pisa.CreatePDF(html_out.encode('utf-8'), path='__dummy__', dest=result, encoding='utf-8')
         result.close()

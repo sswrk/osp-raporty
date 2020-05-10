@@ -1,0 +1,68 @@
+<MonthlyReportScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        size_hint: 1, 0.8
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size_hint: 0.6, 1
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            GridLayout:
+                cols: 1
+                spacing: 30
+                size_hint: (1, None)
+                height: self.minimum_height
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Imię'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Nazwisko'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'ID strażaka'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Ilość dni przepracowanych'
+                    multiline: False
+                TextInput:
+                    size: 200, 30
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Kwota do wypłaty'
+                    multiline: False
+                TextInput:
+                    size: 200, 100
+                    focus: True
+                    size_hint: 1, None
+                    hint_text: 'Uwagi'
+                    multiline: True
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 50
+            size_hint: 0.5, 1
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            Button:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                text: 'Gotowe'
+            Button:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                text: 'Anuluj'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'choice'
