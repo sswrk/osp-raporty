@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Raport z akcji</title>
+</head>
+<body>
+<style>
+@page {
+size: a4;
+margin: 0.5cm;
+}
 
+@font-face {
+font-family: "Arial";
+src: url("{{ font }}");
+}
+
+html {
+font-family: Arial;
+font-size: 10pt;
+}
+.tg  {border-bottom-color: grey; border-bottom-style: solid; border-bottom-width: 1px;
+      border-top-color: grey; border-top-style: solid; border-top-width: 1px;
+      border-left-color: grey; border-left-style: solid; border-left-width: 1px;
+      border-right-color: grey; border-right-style: solid; border-right-width: 1px;}
+.tg td{border-bottom-color: grey; border-bottom-style: solid; border-bottom-width: 1px;
+      border-top-color: grey; border-top-style: solid; border-top-width: 1px;
+      border-left-color: grey; border-left-style: solid; border-left-width: 1px;
+      border-right-color: grey; border-right-style: solid; border-right-width: 1px;overflow:hidden;padding:5px 5px;word-break:normal;}
+.tg th{border-bottom-color: grey; border-bottom-style: solid; border-bottom-width: 1px;
+      border-top-color: grey; border-top-style: solid; border-top-width: 1px;
+      border-left-color: grey; border-left-style: solid; border-left-width: 1px;
+      border-right-color: grey; border-right-style: solid; border-right-width: 1px;border-color:grey;border-style:solid;border-width:1px;
+  font-weight:normal;overflow:hidden;padding:5px 5px;word-break:normal;}
+.tg .tg-77x5{border-bottom-color: grey; border-bottom-style: solid; border-bottom-width: 1px;
+      border-top-color: grey; border-top-style: solid; border-top-width: 1px;
+      border-left-color: grey; border-left-style: solid; border-left-width: 1px;
+      border-right-color: grey; border-right-style: solid; border-right-width: 1px;text-align:left;vertical-align:top}
+.tg .tg-0p48{border-bottom-color: grey; border-bottom-style: solid; border-bottom-width: 1px;
+      border-top-color: grey; border-top-style: solid; border-top-width: 1px;
+      border-left-color: grey; border-left-style: solid; border-left-width: 1px;
+      border-right-color: grey; border-right-style: solid; border-right-width: 1px;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-77x5" colspan="3">OPIS ZDARZENIA<br></th>
+    <th class="tg-0p48">LP.<br><br>{{ lp }}</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0p48">DATA WYJAZDU<br>{{ departure_date }}</td>
+    <td class="tg-0p48" rowspan="2">NA MIEJSCU<br>{{ arrived }}</td>
+    <td class="tg-0p48" colspan="2" rowspan="3">RODZAJ ZDARZENIA<br>{{ incident_type }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48">GODZINA WYJAZDU<br>{{ departure_time }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">MIEJSCE ZDARZENIA<br>{{ incident_place }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">DOWÓDCA SEKCJI<br>{{ section_commander }}</td>
+    <td class="tg-0p48" colspan="2" rowspan="5">SEKCJA<br>{{ section }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">DOWÓDCA AKCJI<br>{{ action_commander }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">KIEROWCA<br>{{ driver }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">SPRAWCA<br>{{ causedby }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="2">POSZKODOWANY<br>{{ victim }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" colspan="4">SZCZEGÓŁY ZDARZENIA: JAKIEGO UŻYTO SPRZĘTU, ILOŚĆ JEDNOSTEK, RODZAJ,<br>CZY NA MIEJSCU BYŁA POLICJA, POGOTOWIE, CZY BYŁY OSOBY RANNE, ITP.<br>{{ details }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48" rowspan="2">DATA POWROTU<br>{{ return_date }}</td>
+    <td class="tg-0p48">GODZ. ZAKOŃCZ.<br>{{ ended_time }}</td>
+    <td class="tg-0p48" rowspan="2">STAN LICZNIKA<br>{{ meter_reading }}</td>
+    <td class="tg-0p48" rowspan="2">KM. DO MIEJSCA ZADARZENIA<br>{{ km_to_incident_place }}</td>
+  </tr>
+  <tr>
+    <td class="tg-0p48">GODZ. W REMIZIE<br>{{ return_time }}</td>
+  </tr>
+</tbody>
+</table>
+</body>
+</html>
