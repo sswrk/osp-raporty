@@ -1,3 +1,4 @@
+import requests
 from kivy.uix.screenmanager import Screen
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.event import EventDispatcher
@@ -43,10 +44,18 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
 
     def sign_up(self, email, password):
         signup_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + self.web_api_key
-        signup_payload = dumps({"email": email, "password": password, "returnSecureToken": "true"})
-        UrlRequest(signup_url, req_body=signup_payload,
-                   on_success=self.successful_login,
-                   on_failure=self.sign_up_failure)
+        signup_payload = {"email": email, "password": password, "returnSecureToken": "true"}
+        result = requests.post(signup_url, json=signup_payload)
+        is_login_successful = result.ok
+        json_result = result.json()
+        if (is_login_successful):
+            self.successful_login(signup_url, json_result)
+        else:
+            self.sign_up_failure(signup_url, json_result)
+        # signup_payload = dumps({"email": email, "password": password, "returnSecureToken": "true"})
+        # UrlRequest(signup_url, req_body=signup_payload,
+        #           on_success=self.successful_login,
+        #           on_failure=self.sign_up_failure)
 
     def successful_login(self, urlrequest, log_in_data):
         self.refresh_token = log_in_data['refreshToken']
@@ -68,13 +77,19 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
 
     def sign_in(self, email, password):
         sign_in_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.web_api_key
-        sign_in_payload = dumps(
-            {"email": email, "password": password, "returnSecureToken": True})
-
-        UrlRequest(sign_in_url, req_body=sign_in_payload,
-                   on_success=self.successful_login,
-                   on_failure=self.sign_in_failure,
-                   on_error=self.sign_in_error)
+        sign_in_payload = {"email": email, "password": password, "returnSecureToken": True}
+        result = requests.post(sign_in_url, json=sign_in_payload)
+        is_login_successful = result.ok
+        json_result = result.json()
+        if(is_login_successful):
+            self.successful_login(sign_in_url, json_result)
+        else:
+            self.sign_in_failure(sign_in_url, json_result)
+        #sign_in_payload = dumps({"email": email, "password": password, "returnSecureToken": True})
+        #UrlRequest(sign_in_url, req_body=sign_in_payload,
+        #           on_success=self.successful_login,
+        #           on_failure=self.sign_in_failure,
+        #           on_error=
 
     def sign_in_failure(self, urlrequest, failure_data):
         self.email_not_found = False
@@ -93,11 +108,19 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
 
     def reset_password(self, email):
         reset_pw_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=" + self.web_api_key
-        reset_pw_data = dumps({"email": email, "requestType": "PASSWORD_RESET"})
-        UrlRequest(reset_pw_url, req_body=reset_pw_data,
-                   on_success=self.successful_reset,
-                   on_failure=self.sign_in_failure,
-                   on_error=self.sign_in_error)
+        reset_pw_data = {"email": email, "requestType": "PASSWORD_RESET"}
+        result = requests.post(reset_pw_url, json=reset_pw_data)
+        is_login_successful = result.ok
+        json_result = result.json()
+        if (is_login_successful):
+            self.successful_reset(reset_pw_url, json_result)
+        else:
+            self.sign_in_failure(reset_pw_url, json_result)
+        #reset_pw_data = dumps({"email": email, "requestType": "PASSWORD_RESET"})
+        #UrlRequest(reset_pw_url, req_body=reset_pw_data,
+        #           on_success=self.successful_reset,
+        #           on_failure=self.sign_in_failure,
+        #           on_error=self.sign_in_error)
 
     def successful_reset(self, urlrequest, reset_data):
         self.sign_in_msg = "Wysłano e-mail z dalszymi instrukcjami"
@@ -117,9 +140,17 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
     def load_saved_account(self):
         self.load_refresh_token()
         refresh_url = "https://securetoken.googleapis.com/v1/token?key=" + self.web_api_key
-        refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
-        UrlRequest(refresh_url, req_body=refresh_payload,
-                   on_success=self.successful_account_load)
+        refresh_payload = {"grant_type": "refresh_token", "refresh_token": self.refresh_token}
+        result = requests.post(refresh_url, json=refresh_payload)
+        is_login_successful = result.ok
+        json_result = result.json()
+        if (is_login_successful):
+            self.successful_reset(refresh_url, json_result)
+        else:
+            self.sign_in_failure(refresh_url, json_result)
+        #refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
+        #UrlRequest(refresh_url, req_body=refresh_payload,
+        #           on_success=self.successful_account_load)
 
     def successful_account_load(self, urlrequest, loaded_data):
         self.idToken = loaded_data['id_token']
