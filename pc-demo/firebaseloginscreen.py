@@ -18,8 +18,9 @@ def override_where():
     """ overrides certifi.core.where to return actual location of cacert.pem"""
     # change this to match the location of cacert.pem
     return os.path.abspath("certifi/cacert.pem")
+'''
 import certifi
-
+'''
 os.environ["REQUESTS_CA_BUNDLE"] = override_where()
 certifi.core.where = override_where
 '''
