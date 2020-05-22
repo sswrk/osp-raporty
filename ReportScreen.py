@@ -33,7 +33,7 @@ class ReportScreen(Screen):
     return_time = ""
     meter_reading = ""
     km_to_incident_place = ""
-    font = os.path.abspath("FirebaseLoginScreen/resources/Arial.ttf")
+    font = os.path.abspath("resources/Arial.ttf")
     #android:
     folder = '/storage/emulated/0/'
     #windows-demo:
