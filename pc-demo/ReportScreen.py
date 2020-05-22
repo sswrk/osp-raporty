@@ -6,9 +6,6 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from xhtml2pdf import pisa
 import os
-#from android.permissions import request_permissions, Permission
-#request_permissions([Permission.WRITE_EXTERNAL_STORAGE,
-#                     Permission.READ_EXTERNAL_STORAGE])
 
 with open('reportscreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
@@ -36,7 +33,7 @@ class ReportScreen(Screen):
     return_time = ""
     meter_reading = ""
     km_to_incident_place = ""
-    font = os.path.abspath("FirebaseLoginScreen/resources/Arial.ttf")
+    font = os.path.abspath("resources/Arial.ttf")
     #android:
     #folder = '/storage/emulated/0/'
     #windows-demo:
