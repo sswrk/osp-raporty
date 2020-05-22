@@ -140,17 +140,15 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
     def load_saved_account(self):
         self.load_refresh_token()
         refresh_url = "https://securetoken.googleapis.com/v1/token?key=" + self.web_api_key
-        refresh_payload = {"grant_type": "refresh_token", "refresh_token": self.refresh_token}
-        result = requests.post(refresh_url, json=refresh_payload)
-        is_login_successful = result.ok
-        json_result = result.json()
-        if (is_login_successful):
-            self.successful_reset(refresh_url, json_result)
-        else:
-            self.sign_in_failure(refresh_url, json_result)
-        #refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
-        #UrlRequest(refresh_url, req_body=refresh_payload,
-        #           on_success=self.successful_account_load)
+        #refresh_payload = {"grant_type": "refresh_token", "refresh_token": self.refresh_token}
+        #result = requests.post(refresh_url, json=refresh_payload)
+        #is_login_successful = result.ok
+        #json_result = result.json()
+        #if (is_login_successful):
+        #    self.successful_account_load(refresh_url, json_result)
+        refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
+        UrlRequest(refresh_url, req_body=refresh_payload,
+                   on_success=self.successful_account_load)
 
     def successful_account_load(self, urlrequest, loaded_data):
         self.idToken = loaded_data['id_token']
