@@ -1,0 +1,42 @@
+<CreateAccountScreen>:
+    FloatLayout:
+        Button:
+            size_hint: .4, .05
+            pos_hint: {"center_x": .25, "top": .45}
+            text: "Powrót"
+            on_release:
+                root.parent.transition = SlideTransition(direction="right")
+                root.parent.current = root.parent.current = "welcome_screen"
+                root.parent.transition = SlideTransition(direction="left")
+        TextInput:
+            id: email
+            size_hint: .9 ,.1
+            pos_hint: {"center_x": .5, "top": .7}
+            hint_text: "E-mail"
+        TextInput:
+            id: password
+            size_hint: .9 ,.1
+            pos_hint: {"center_x": .5, "top": .575}
+            hint_text: "Hasło"
+            password: True
+        Button:
+            text: "Zarejestruj się"
+            size_hint: .4 ,.05
+            pos_hint: {"center_x": .75, "top": .45}
+            on_release:
+                root.parent.parent.sign_up(email.text, password.text)
+                sign_in_button.opacity = 0
+                sign_in_button.disabled = True
+        Button:
+            id: sign_in_button
+            text: "Zaloguj się"
+            size_hint: .2 ,.05
+            pos_hint: {"right": .85, "center_y": .1}
+            opacity: 0
+            disabled: True
+            on_release:
+                root.parent.current = "sign_in_screen"
+                root.parent.parent.ids.sign_in_screen.ids.email.text = email.text
+                root.parent.parent.ids.sign_in_screen.ids.password.text = password.text
+
+

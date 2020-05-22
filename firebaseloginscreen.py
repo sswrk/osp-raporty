@@ -1,4 +1,3 @@
-import requests
 from kivy.uix.screenmanager import Screen
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.event import EventDispatcher
@@ -9,6 +8,23 @@ from json import dumps
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 import os.path
+from android.permissions import request_permissions, Permission
+request_permissions([Permission.INTERNET,
+		     Permission.ACCESS_NETWORK_STATE,
+		     Permission.WRITE_EXTERNAL_STORAGE,
+                     Permission.READ_EXTERNAL_STORAGE])
+
+def override_where():
+    """ overrides certifi.core.where to return actual location of cacert.pem"""
+    # change this to match the location of cacert.pem
+    return os.path.abspath("certifi/cacert.pem")
+import certifi
+
+os.environ["REQUESTS_CA_BUNDLE"] = override_where()
+certifi.core.where = override_where
+import requests
+requests.utils.DEFAULT_CA_BUNDLE_PATH = override_where()
+requests.adapters.DEFAULT_CA_BUNDLE_PATH = override_where()
 
 with open('signinscreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
@@ -148,11 +164,10 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
         #    self.successful_account_load(refresh_url, json_result)
         refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
         UrlRequest(refresh_url, req_body=refresh_payload,
-                   on_success=self.successful_account_load)
+                   on_success=self.successful_account_load,
+		   ca_file=certifi.where(), verify=True)
 
     def successful_account_load(self, urlrequest, loaded_data):
         self.idToken = loaded_data['id_token']
         self.localId = loaded_data['user_id']
         self.login_success = True
-
-
