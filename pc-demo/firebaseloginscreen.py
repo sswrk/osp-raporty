@@ -161,10 +161,7 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
         ConnectionInfo.uid = loaded_data['user_id']
         self.login_success = True
 
-    def load_reports(self):
-        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
-        auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
-        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + auth_key).content)
-        for report in ConnectionInfo.reports:
-            label = ReportLabel(report=report)
-            self.parent.ids['report_list'].ids['reports_list_grid'].add_widget(label)
+    def sign_out(self):
+        with open(self.refresh_token_file, 'w') as f:
+            f.write("")
+        self.login_success = False
