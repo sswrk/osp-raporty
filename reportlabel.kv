@@ -1,0 +1,9 @@
+<ReportLabel>
+    GridLayout:
+        rows: 1
+        cols: 2
+        Button:
+            text: root.name
+            on_release:
+                root.parent.parent.parent.parent.manager.current = "report"
+                root.parent.parent.parent.parent.parent.ids.report.set_args(root.report)

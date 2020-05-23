@@ -16,5 +16,16 @@
         Button:
             size_hint: 0.5, 0.5
             pos_hint: {'center_x': .5, 'center_y': .5}
-            text: 'Wyjdź'
-            on_press: app.stop()
+            text: 'Twoje raporty'
+            on_press:
+                root.load_reports()
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'report_list'
+        Button:
+            size_hint: 0.5, 0.5
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            text: 'Wyloguj'
+            on_press:
+                root.parent.ids.firebase_login_screen.sign_out()
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'firebase_login_screen'

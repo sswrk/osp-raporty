@@ -1,0 +1,26 @@
+<ReportListScreen>:
+    GridLayout:
+        cols: 1
+        ScrollView:
+            size_hi9nt: 1, 0.
+            pos_hint: {"top": 1, "left": 1}
+            do_scroll_x: False
+            do_scroll_y: True
+            GridLayout:
+                size_hint: (1, None)
+                height: self.minimum_height
+                cols: 1
+                id: reports_list_grid
+                size_hint_y: None
+                row_default_height: '100dp'
+                row_force_default: True
+                spacing: 5,5
+                #padding: 0, 5
+        Button:
+            text: "Powrót"
+            size_hint: 1, .1
+            pos_hint: {"top": .1, "right": 1}
+            markup: True
+            on_release:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'

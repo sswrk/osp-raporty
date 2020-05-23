@@ -1,4 +1,6 @@
 if __name__ == "__main__":
+    import ConnectionInfo
+    ConnectionInfo.init()
     from kivy.app import App
     from kivy.core.window import Window
 

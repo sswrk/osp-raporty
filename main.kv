@@ -2,9 +2,11 @@
 #:import FirebaseLoginScreen firebaseloginscreen.FirebaseLoginScreen
 #:import MainMenu MainMenu.MainMenu
 #:import ReportScreen ReportScreen.ReportScreen
+#:import ReportListScreen ReportListScreen.ReportListScreen
 #:import utils kivy.utils
 
 ScreenManager:
+    id: screen_manager
     FirebaseLoginScreen:
         id: firebase_login_screen
         name: "firebase_login_screen"
@@ -19,3 +21,6 @@ ScreenManager:
     ReportScreen:
         id: report
         name: "report"
+    ReportListScreen:
+        id: report_list
+        name: "report_list"
