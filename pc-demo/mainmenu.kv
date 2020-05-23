@@ -16,5 +16,12 @@
         Button:
             size_hint: 0.5, 0.5
             pos_hint: {'center_x': .5, 'center_y': .5}
+            text: 'Twoje raporty'
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'report_list'
+        Button:
+            size_hint: 0.5, 0.5
+            pos_hint: {'center_x': .5, 'center_y': .5}
             text: 'Wyjdź'
             on_press: app.stop()

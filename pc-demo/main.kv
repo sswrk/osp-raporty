@@ -2,9 +2,11 @@
 #:import FirebaseLoginScreen firebaseloginscreen.FirebaseLoginScreen
 #:import MainMenu MainMenu.MainMenu
 #:import ReportScreen ReportScreen.ReportScreen
+#:import ReportListScreen ReportListScreen.ReportListScreen
 #:import utils kivy.utils
 
 ScreenManager:
+    id: screen_manager
     FirebaseLoginScreen:
         id: firebase_login_screen
         name: "firebase_login_screen"
@@ -12,6 +14,7 @@ ScreenManager:
         on_login_success:
             app.user_localId = self.localId
             app.user_idToken = self.idToken
+            self.load_reports()
             root.current = "menu"
     MainMenu:
         id: menu
@@ -19,3 +22,6 @@ ScreenManager:
     ReportScreen:
         id: report
         name: "report"
+    ReportListScreen:
+        id: report_list
+        name: "report_list"

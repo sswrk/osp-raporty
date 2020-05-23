@@ -1,3 +1,5 @@
+from kivy.tests.test_clock import callback
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.event import EventDispatcher
@@ -8,6 +10,9 @@ from json import dumps
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 import os.path
+import json
+import ConnectionInfo
+from ReportLabel import ReportLabel
 '''from android.permissions import request_permissions, Permission
 request_permissions([Permission.INTERNET,
 		     Permission.ACCESS_NETWORK_STATE,
@@ -38,8 +43,8 @@ with open('welcomescreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
 
 from welcomescreen import WelcomeScreen
-from signinscreen import SignInScreen
-from createaccountscreen import CreateAccountScreen
+from SignInScreen import SignInScreen
+from CreateAccountScreen import CreateAccountScreen
 
 class FirebaseLoginScreen(Screen, EventDispatcher):
     web_api_key = StringProperty()
@@ -75,7 +80,7 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
 
     def successful_login(self, urlrequest, log_in_data):
         self.refresh_token = log_in_data['refreshToken']
-        self.localId = log_in_data['localId']
+        ConnectionInfo.uid = log_in_data['localId']
         self.idToken = log_in_data['idToken']
         self.save_refresh_token(self.refresh_token)
         self.login_success = True
@@ -153,5 +158,13 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
 
     def successful_account_load(self, urlrequest, loaded_data):
         self.idToken = loaded_data['id_token']
-        self.localId = loaded_data['user_id']
+        ConnectionInfo.uid = loaded_data['user_id']
         self.login_success = True
+
+    def load_reports(self):
+        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
+        auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
+        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + auth_key).content)
+        for report in ConnectionInfo.reports:
+            label = ReportLabel(report=report)
+            self.parent.ids['report_list'].ids['reports_list_grid'].add_widget(label)
