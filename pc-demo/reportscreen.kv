@@ -160,11 +160,11 @@
                     root.return_time = return_time.text
                     root.meter_reading = meter_reading.text
                     root.km_to_incident_place = km_to_incident_place.text
-                    root.addToDatabase()
+                    root.add_to_database()
                     root.reload_reports()
                     root.reset_report()
                     root.manager.transition.direction = 'right'
-                    root.manager.current = 'menu'
+                    root.manager.current = 'report_list'
             Button:
                 size_hint: 0.5, 0.5
                 pos_hint: {'center_x': .5, 'center_y': .5}
@@ -188,8 +188,8 @@
                     root.return_time = return_time.text
                     root.meter_reading = meter_reading.text
                     root.km_to_incident_place = km_to_incident_place.text
-                    root.addToDatabase()
-                    root.generatePDF()
+                    root.add_to_database()
+                    root.generate_pdf()
                     Factory.MyPopup().open()
             Button:
                 size_hint: 0.5, 0.5

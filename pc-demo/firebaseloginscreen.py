@@ -1,5 +1,3 @@
-from kivy.tests.test_clock import callback
-from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.event import EventDispatcher
@@ -13,6 +11,7 @@ import os.path
 import json
 import ConnectionInfo
 from ReportLabel import ReportLabel
+
 '''from android.permissions import request_permissions, Permission
 request_permissions([Permission.INTERNET,
 		     Permission.ACCESS_NETWORK_STATE,
@@ -25,11 +24,13 @@ def override_where():
     return os.path.abspath("certifi/cacert.pem")
 '''
 import certifi
+
 '''
 os.environ["REQUESTS_CA_BUNDLE"] = override_where()
 certifi.core.where = override_where
 '''
 import requests
+
 '''
 requests.utils.DEFAULT_CA_BUNDLE_PATH = override_where()
 requests.adapters.DEFAULT_CA_BUNDLE_PATH = override_where()
@@ -46,6 +47,7 @@ from welcomescreen import WelcomeScreen
 from SignInScreen import SignInScreen
 from CreateAccountScreen import CreateAccountScreen
 
+
 class FirebaseLoginScreen(Screen, EventDispatcher):
     web_api_key = StringProperty()
 
@@ -60,7 +62,6 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
     email_not_found = BooleanProperty(False)
 
     debug = False
-
 
     def on_web_api_key(self, *args):
         self.refresh_token_file = App.get_running_app().user_data_dir + "/refresh_token.txt"
@@ -84,6 +85,7 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
         self.idToken = log_in_data['idToken']
         self.save_refresh_token(self.refresh_token)
         self.login_success = True
+        self.load_reports()
 
     def sign_up_failure(self, urlrequest, failure_data):
         self.email_exists = False
@@ -102,7 +104,7 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
         result = requests.post(sign_in_url, json=sign_in_payload)
         is_login_successful = result.ok
         json_result = result.json()
-        if(is_login_successful):
+        if (is_login_successful):
             self.successful_login(sign_in_url, json_result)
         else:
             self.sign_in_failure(sign_in_url, json_result)
@@ -154,14 +156,25 @@ class FirebaseLoginScreen(Screen, EventDispatcher):
         refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
         UrlRequest(refresh_url, req_body=refresh_payload,
                    on_success=self.successful_account_load,
-		   ca_file=certifi.where(), verify=True)
+                   ca_file=certifi.where(), verify=True)
 
     def successful_account_load(self, urlrequest, loaded_data):
         self.idToken = loaded_data['id_token']
         ConnectionInfo.uid = loaded_data['user_id']
         self.login_success = True
+        self.load_reports()
 
     def sign_out(self):
         with open(self.refresh_token_file, 'w') as f:
             f.write("")
         self.login_success = False
+
+    def load_reports(self):
+        url = ConnectionInfo.database_url + ConnectionInfo.uid + '/.json'
+        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + ConnectionInfo.database_auth_key).content)
+        self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
+        if (ConnectionInfo.reports):
+            for report in ConnectionInfo.reports:
+                label = ReportLabel(report=report)
+                grid = self.parent.ids['report_list'].ids['reports_list_grid']
+                grid.add_widget(label, len(grid.children))

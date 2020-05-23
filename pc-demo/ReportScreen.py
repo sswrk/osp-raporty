@@ -1,5 +1,4 @@
 import json
-
 import requests
 from kivy.lang import Builder
 from kivy.properties import StringProperty
@@ -14,6 +13,7 @@ from ReportLabel import ReportLabel
 
 with open('reportscreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
+
 
 class ReportScreen(Screen):
     currentdate = StringProperty()
@@ -39,9 +39,9 @@ class ReportScreen(Screen):
     meter_reading = ""
     km_to_incident_place = ""
     font = os.path.abspath("resources/Arial.ttf")
-    #android:
-    #folder = '/storage/emulated/0/'
-    #windows-demo:
+    # android:
+    # folder = '/storage/emulated/0/'
+    # pc:
     folder = ''
 
     def set_args(self, report):
@@ -68,36 +68,37 @@ class ReportScreen(Screen):
         self.currenttime = datetime.now().strftime("%H:%M")
         super(Screen, self).__init__(**kwargs)
 
-    def addToDatabase(self):
-        url = 'https://osp-raporty.firebaseio.com/'+ConnectionInfo.uid+'/.json'
-        report_name = ('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')
+    def add_to_database(self):
+        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
+        report_name = ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.',
+                                                                                                         '-').replace(
+            ':', '-')
         payload = {report_name: {"description": self.description,
-                               "lp": self.lp,
-                               "departure_date": self.departure_date,
-                               "departure_time": self.departure_time,
-                               "arrived": self.arrived,
-                               "incident_place": self.incident_place,
-                               "incident_type": self.incident_type,
-                               "section_commander": self.section_commander,
-                               "action_commander": self.action_commander,
-                               "driver": self.driver,
-                               "causedby": self.causedby,
-                               "victim": self.victim,
-                               "section": self.section,
-                               "details": self.details,
-                               "return_date": self.return_date,
-                               "ended_time": self.ended_time,
-                               "return_time": self.return_time,
-                               "meter_reading": self.meter_reading,
-                               "km_to_incident_place": self.km_to_incident_place}}
+                                 "lp": self.lp,
+                                 "departure_date": self.departure_date,
+                                 "departure_time": self.departure_time,
+                                 "arrived": self.arrived,
+                                 "incident_place": self.incident_place,
+                                 "incident_type": self.incident_type,
+                                 "section_commander": self.section_commander,
+                                 "action_commander": self.action_commander,
+                                 "driver": self.driver,
+                                 "causedby": self.causedby,
+                                 "victim": self.victim,
+                                 "section": self.section,
+                                 "details": self.details,
+                                 "return_date": self.return_date,
+                                 "ended_time": self.ended_time,
+                                 "return_time": self.return_time,
+                                 "meter_reading": self.meter_reading,
+                                 "km_to_incident_place": self.km_to_incident_place}}
         requests.patch(url=url, json=payload)
 
-
-    def generatePDF(self):
+    def generate_pdf(self):
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template("resources/template.html")
         template_vars = {"font": self.font,
-			             "description": self.description,
+                         "description": self.description,
                          "lp": self.lp,
                          "departure_date": self.departure_date,
                          "departure_time": self.departure_time,
@@ -118,22 +119,33 @@ class ReportScreen(Screen):
                          "km_to_incident_place": self.km_to_incident_place}
 
         html_out = template.render(template_vars)
-        result = open(os.path.join(self.folder,('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')+'.pdf'), "w+b")
-        result_html = open(os.path.join(self.folder,('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')+'.html'), "w", encoding='utf-8')
+        result = open(os.path.join(self.folder,
+                                   ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace(
+                                       '.', '-').replace(':', '-') + '.pdf'), "w+b")
+        result_html = open(os.path.join(self.folder, (
+                    'Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
+            ':', '-') + '.html'), "w", encoding='utf-8')
         result_html.write(html_out)
         pisa.CreatePDF(html_out.encode('utf-8'), path='__dummy__', dest=result, encoding='utf-8')
         result.close()
 
     def reload_reports(self):
-        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
-        auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
-        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + auth_key).content)
-        self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
-        if (ConnectionInfo.reports):
-            for report in ConnectionInfo.reports:
-                label = ReportLabel(report=report)
-                grid = self.parent.ids['report_list'].ids['reports_list_grid']
-                grid.add_widget(label, len(grid.children))
+        replace = False
+        try:
+            ConnectionInfo.reports[
+                ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
+                    ':', '-')]
+        except KeyError:
+            replace = True
+        url = ConnectionInfo.database_url + ConnectionInfo.uid + '/.json'
+        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + ConnectionInfo.database_auth_key).content)
+        if replace:
+            self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
+            if ConnectionInfo.reports:
+                for report in ConnectionInfo.reports:
+                    label = ReportLabel(report=report)
+                    grid = self.parent.ids['report_list'].ids['reports_list_grid']
+                    grid.add_widget(label, len(grid.children))
 
     def reset_report(self):
         self.ids['lp'].text = ""
@@ -153,3 +165,4 @@ class ReportScreen(Screen):
         self.ids['ended_time'].text = ""
         self.ids['return_time'].text = datetime.now().strftime("%H:%M")
         self.ids['km_to_incident_place'].text = ""
+
