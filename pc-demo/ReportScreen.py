@@ -129,9 +129,11 @@ class ReportScreen(Screen):
         auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
         ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + auth_key).content)
         self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
-        for report in ConnectionInfo.reports:
-            label = ReportLabel(report=report)
-            self.parent.ids['report_list'].ids['reports_list_grid'].add_widget(label)
+        if (ConnectionInfo.reports):
+            for report in ConnectionInfo.reports:
+                label = ReportLabel(report=report)
+                grid = self.parent.ids['report_list'].ids['reports_list_grid']
+                grid.add_widget(label, len(grid.children))
 
     def reset_report(self):
         self.ids['lp'].text = ""

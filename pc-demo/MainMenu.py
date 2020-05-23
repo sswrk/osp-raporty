@@ -19,4 +19,5 @@ class MainMenu(Screen):
         if(ConnectionInfo.reports):
             for report in ConnectionInfo.reports:
                 label = ReportLabel(report=report)
-                self.parent.ids['report_list'].ids['reports_list_grid'].add_widget(label)
+                grid = self.parent.ids['report_list'].ids['reports_list_grid']
+                grid.add_widget(label, len(grid.children))
