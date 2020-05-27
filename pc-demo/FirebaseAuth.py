@@ -61,8 +61,6 @@ class FirebaseAuth(Screen, EventDispatcher):
     email_exists = BooleanProperty(False)
     email_not_found = BooleanProperty(False)
 
-    debug = False
-
     def on_web_api_key(self, *args):
         self.refresh_token_file = App.get_running_app().user_data_dir + "/refresh_token.txt"
         if os.path.exists(self.refresh_token_file):
@@ -119,10 +117,6 @@ class FirebaseAuth(Screen, EventDispatcher):
                     content=Label(text=msg),
                     size_hint=(None, None), size=(400, 400))
         pop.open()
-
-    def sign_in_error(self, *args):
-        if self.debug:
-            print("Sign in error", args)
 
     def reset_password(self, email):
         reset_pw_url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=" + self.web_api_key
