@@ -9,12 +9,12 @@
     BoxLayout:
         orientation: 'vertical'
         spacing: 10
-        size_hint: 1, 0.8
+        size_hint: 1, 0.9
         pos_hint: {'center_x': .5, 'center_y': .5}
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
-            size_hint: 0.6, 1
+            size_hint: 0.8, 1
             pos_hint: {'center_x': .5, 'center_y': .5}
             GridLayout:
                 cols: 1
@@ -23,119 +23,119 @@
                 height: self.minimum_height
                 TextInput:
                     id: lp
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'L.P'
                     multiline: False
                 TextInput:
                     id: departure_date
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Data wyjazdu'
                     multiline: False
                     text: root.currentdate
                 TextInput:
                     id: incident_type
-                    size: 200, 100
+                    size: 300, 100
                     size_hint: 1, None
                     hint_text: 'Rodzaj zdarzenia'
                     multiline: True
                 TextInput:
                     id: departure_time
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Godzina wyjazdu'
                     multiline: False
                 TextInput:
                     id: arrived
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Na miejscu'
                     multiline: False
                 TextInput:
                     id: incident_place
-                    size: 200, 100
+                    size: 300, 100
                     size_hint: 1, None
                     hint_text: 'Miejsce zdarzenia'
                     multiline: True
                 TextInput:
                     id: section_commander
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Dowódca sekcji'
                     multiline: False
                 TextInput:
                     id: action_commander
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Dowódca akcji'
                     multiline: False
                 TextInput:
                     id: driver
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Kierowca'
                     multiline: False
                 TextInput:
                     id: causedby
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Sprawca'
                     multiline: False
                 TextInput:
                     id: victim
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Poszkodowany'
                     multiline: False
                 TextInput:
                     id: section
-                    size: 200, 100
+                    size: 300, 100
                     size_hint: 1, None
                     hint_text: 'Sekcja'
                     multiline: True
                 TextInput:
                     id: details
-                    size: 200, 200
+                    size: 300, 200
                     size_hint: 1, None
                     hint_text: 'Szczegóły zdarzenia: jakiego użyto sprzętu, ilość jednostek, rodzaj, czy na miejscu była policja, pogotowie, czy były osoby ranne, itp.'
                     multiline: True
                 TextInput:
                     id: return_date
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Data powrotu'
                     multiline: False
                     text: root.currentdate
                 TextInput:
                     id: ended_time
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Godz. zakończ.'
                     multiline: False
                 TextInput:
                     id: return_time
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Godz. w remizie'
                     multiline: False
                     text: root.currenttime
                 TextInput:
                     id: meter_reading
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'Stan licznika'
                     multiline: False
                 TextInput:
                     id: km_to_incident_place
-                    size: 200, 30
+                    size: 300, 60
                     size_hint: 1, None
                     hint_text: 'km do miejsca zdarzenia'
                     multiline: False
         BoxLayout:
             orientation: 'horizontal'
             spacing: 50
-            size_hint: 0.5, 1
+            size_hint: 0.8, 0.2
             pos_hint: {'center_x': .5, 'center_y': .5}
             Button:
                 size_hint: 0.5, 0.5
@@ -160,11 +160,7 @@
                     root.return_time = return_time.text
                     root.meter_reading = meter_reading.text
                     root.km_to_incident_place = km_to_incident_place.text
-                    root.addToDatabase()
-                    root.reload_reports()
-                    root.reset_report()
-                    root.manager.transition.direction = 'right'
-                    root.manager.current = 'menu'
+                    if root.check_validation() == True: root.add_to_database(); root.reload_reports(); root.reset_report();  root.manager.transition.direction = 'right'; root.manager.current = 'report_list'
             Button:
                 size_hint: 0.5, 0.5
                 pos_hint: {'center_x': .5, 'center_y': .5}
@@ -188,9 +184,7 @@
                     root.return_time = return_time.text
                     root.meter_reading = meter_reading.text
                     root.km_to_incident_place = km_to_incident_place.text
-                    root.addToDatabase()
-                    root.generatePDF()
-                    Factory.MyPopup().open()
+                    if root.check_validation() == True: root.add_to_database(); root.generate_pdf(); Factory.MyPopup().open()
             Button:
                 size_hint: 0.5, 0.5
                 pos_hint: {'center_x': .5, 'center_y': .5}

@@ -1,8 +1,10 @@
 import json
-
 import requests
+import string
 from kivy.lang import Builder
 from kivy.properties import StringProperty
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from datetime import date
 from datetime import datetime
@@ -14,6 +16,7 @@ from ReportLabel import ReportLabel
 
 with open('reportscreen.kv', encoding='utf8') as f:
     Builder.load_string(f.read())
+
 
 class ReportScreen(Screen):
     currentdate = StringProperty()
@@ -39,9 +42,9 @@ class ReportScreen(Screen):
     meter_reading = ""
     km_to_incident_place = ""
     font = os.path.abspath("resources/Arial.ttf")
-    #android:
+    # android:
     folder = '/storage/emulated/0/'
-    #windows-demo:
+    # pc:
     #folder = ''
 
     def set_args(self, report):
@@ -68,36 +71,37 @@ class ReportScreen(Screen):
         self.currenttime = datetime.now().strftime("%H:%M")
         super(Screen, self).__init__(**kwargs)
 
-    def addToDatabase(self):
-        url = 'https://osp-raporty.firebaseio.com/'+ConnectionInfo.uid+'/.json'
-        report_name = ('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')
+    def add_to_database(self):
+        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
+        report_name = ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.',
+                                                                                                         '-').replace(
+            ':', '-')
         payload = {report_name: {"description": self.description,
-                               "lp": self.lp,
-                               "departure_date": self.departure_date,
-                               "departure_time": self.departure_time,
-                               "arrived": self.arrived,
-                               "incident_place": self.incident_place,
-                               "incident_type": self.incident_type,
-                               "section_commander": self.section_commander,
-                               "action_commander": self.action_commander,
-                               "driver": self.driver,
-                               "causedby": self.causedby,
-                               "victim": self.victim,
-                               "section": self.section,
-                               "details": self.details,
-                               "return_date": self.return_date,
-                               "ended_time": self.ended_time,
-                               "return_time": self.return_time,
-                               "meter_reading": self.meter_reading,
-                               "km_to_incident_place": self.km_to_incident_place}}
+                                 "lp": self.lp,
+                                 "departure_date": self.departure_date,
+                                 "departure_time": self.departure_time,
+                                 "arrived": self.arrived,
+                                 "incident_place": self.incident_place,
+                                 "incident_type": self.incident_type,
+                                 "section_commander": self.section_commander,
+                                 "action_commander": self.action_commander,
+                                 "driver": self.driver,
+                                 "causedby": self.causedby,
+                                 "victim": self.victim,
+                                 "section": self.section,
+                                 "details": self.details,
+                                 "return_date": self.return_date,
+                                 "ended_time": self.ended_time,
+                                 "return_time": self.return_time,
+                                 "meter_reading": self.meter_reading,
+                                 "km_to_incident_place": self.km_to_incident_place}}
         requests.patch(url=url, json=payload)
 
-
-    def generatePDF(self):
+    def generate_pdf(self):
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template("resources/template.html")
         template_vars = {"font": self.font,
-			             "description": self.description,
+                         "description": self.description,
                          "lp": self.lp,
                          "departure_date": self.departure_date,
                          "departure_time": self.departure_time,
@@ -118,22 +122,35 @@ class ReportScreen(Screen):
                          "km_to_incident_place": self.km_to_incident_place}
 
         html_out = template.render(template_vars)
-        result = open(os.path.join(self.folder,('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')+'.pdf'), "w+b")
-        result_html = open(os.path.join(self.folder,('Raport_'+self.departure_date+'_'+self.return_time+'_'+self.lp).replace('.','-').replace(':','-')+'.html'), "w", encoding='utf-8')
+        result = open(os.path.join(self.folder,
+                                   ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace(
+                                       '.', '-').replace(':', '-') + '.pdf'), "w+b")
+        result_html = open(os.path.join(self.folder, (
+                'Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
+            ':', '-') + '.html'), "w", encoding='utf-8')
         result_html.write(html_out)
         pisa.CreatePDF(html_out.encode('utf-8'), path='__dummy__', dest=result, encoding='utf-8')
         result.close()
 
     def reload_reports(self):
-        url = 'https://osp-raporty.firebaseio.com/' + ConnectionInfo.uid + '/.json'
-        auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
-        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + auth_key).content)
-        self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
-        if (ConnectionInfo.reports):
-            for report in ConnectionInfo.reports:
-                label = ReportLabel(report=report)
-                grid = self.parent.ids['report_list'].ids['reports_list_grid']
-                grid.add_widget(label, len(grid.children))
+        replace = True
+        try:
+            ConnectionInfo.reports[
+                ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
+                    ':', '-')]
+        except KeyError:
+            replace = False
+        except TypeError:
+            replace = False
+        url = ConnectionInfo.database_url + ConnectionInfo.uid + '/.json'
+        ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + ConnectionInfo.database_auth_key).content)
+        if not replace:
+            self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
+            if ConnectionInfo.reports:
+                for report in ConnectionInfo.reports:
+                    label = ReportLabel(report=report)
+                    grid = self.parent.ids['report_list'].ids['reports_list_grid']
+                    grid.add_widget(label, len(grid.children))
 
     def reset_report(self):
         self.ids['lp'].text = ""
@@ -153,3 +170,25 @@ class ReportScreen(Screen):
         self.ids['ended_time'].text = ""
         self.ids['return_time'].text = datetime.now().strftime("%H:%M")
         self.ids['km_to_incident_place'].text = ""
+
+    def check_validation(self):
+        error = ""
+        if not self.lp == "" and not self.lp.isdigit():
+            error += "Liczba porządkowa musi być liczbą!\n"
+        if (not self.departure_time == "" and set(self.departure_time) - set(string.digits + ':')) \
+                or (not self.ended_time == "" and set(self.ended_time) - set(string.digits + ':')) \
+                or (not self.return_time == "" and set(self.return_time) - set(string.digits + ':')):
+
+            error += "Godziny powinny byc w formacie \'GG:MM\'\n"
+        if (not self.departure_date == "" and set(self.departure_date) - set(string.digits + '.'))\
+                or (not self.return_date == "" and set(self.return_date) - set(string.digits + '.')):
+            error += "Daty powinny byc w formacie \'dd.mm.yyyy\'\n"
+        if not self.km_to_incident_place == "" and not self.km_to_incident_place.isdigit():
+            error += "Kilometry do miejsca zdarzenia muszą być liczbą!\n"
+        if error == "":
+            return True
+        pop = Popup(title='Nie zapisano raportu',
+                    content=Label(text=error),
+                    size_hint=(None, None), size=(400, 400))
+        pop.open()
+        return False
