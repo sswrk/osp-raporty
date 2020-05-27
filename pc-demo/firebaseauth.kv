@@ -1,0 +1,21 @@
+#:import Animation kivy.animation.Animation
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+<FirebaseAuth>:
+    on_email_exists:
+        create_account_screen.ids.sign_in_button.disabled = False
+        create_account_screen.ids.sign_in_button.opacity = 1
+    on_email_not_found:
+        sign_in_screen.ids.sign_in_button.disabled = False
+        sign_in_screen.ids.sign_in_button.opacity = 1
+    ScreenManager:
+        id: screen_manager
+        StartScreen:
+            id: start_screen
+            name: "start_screen"
+        LoginScreen:
+            id: login_screen
+            name: "login_screen"
+        RegisterScreen:
+            id: register_screen
+            name: "register_screen"

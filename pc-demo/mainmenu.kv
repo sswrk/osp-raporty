@@ -25,6 +25,6 @@
             pos_hint: {'center_x': .5, 'center_y': .5}
             text: 'Wyloguj'
             on_press:
-                root.parent.ids.firebase_login_screen.sign_out()
+                root.parent.ids.firebase_auth.sign_out()
                 root.manager.transition.direction = 'right'
-                root.manager.current = 'firebase_login_screen'
+                root.manager.current = 'firebase_auth'

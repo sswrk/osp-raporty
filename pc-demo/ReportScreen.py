@@ -1,7 +1,10 @@
 import json
 import requests
+import string
 from kivy.lang import Builder
 from kivy.properties import StringProperty
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from datetime import date
 from datetime import datetime
@@ -123,23 +126,25 @@ class ReportScreen(Screen):
                                    ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace(
                                        '.', '-').replace(':', '-') + '.pdf'), "w+b")
         result_html = open(os.path.join(self.folder, (
-                    'Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
+                'Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
             ':', '-') + '.html'), "w", encoding='utf-8')
         result_html.write(html_out)
         pisa.CreatePDF(html_out.encode('utf-8'), path='__dummy__', dest=result, encoding='utf-8')
         result.close()
 
     def reload_reports(self):
-        replace = False
+        replace = True
         try:
             ConnectionInfo.reports[
                 ('Raport_' + self.departure_date + '_' + self.return_time + '_' + self.lp).replace('.', '-').replace(
                     ':', '-')]
         except KeyError:
-            replace = True
+            replace = False
+        except TypeError:
+            replace = False
         url = ConnectionInfo.database_url + ConnectionInfo.uid + '/.json'
         ConnectionInfo.reports = json.loads(requests.get(url + '?auth=' + ConnectionInfo.database_auth_key).content)
-        if replace:
+        if not replace:
             self.parent.ids['report_list'].ids['reports_list_grid'].clear_widgets()
             if ConnectionInfo.reports:
                 for report in ConnectionInfo.reports:
@@ -166,3 +171,24 @@ class ReportScreen(Screen):
         self.ids['return_time'].text = datetime.now().strftime("%H:%M")
         self.ids['km_to_incident_place'].text = ""
 
+    def check_validation(self):
+        error = ""
+        if not self.lp == "" and not self.lp.isdigit():
+            error += "Liczba porządkowa musi być liczbą!\n"
+        if (not self.departure_time == "" and set(self.departure_time) - set(string.digits + ':')) \
+                or (not self.ended_time == "" and set(self.ended_time) - set(string.digits + ':')) \
+                or (not self.return_time == "" and set(self.return_time) - set(string.digits + ':')):
+
+            error += "Godziny powinny byc w formacie \'GG:MM\'\n"
+        if (not self.departure_date == "" and set(self.departure_date) - set(string.digits + '.'))\
+                or (not self.return_date == "" and set(self.return_date) - set(string.digits + '.')):
+            error += "Daty powinny byc w formacie \'dd.mm.yyyy\'\n"
+        if not self.km_to_incident_place == "" and not self.km_to_incident_place.isdigit():
+            error += "Kilometry do miejsca zdarzenia muszą być liczbą!\n"
+        if error == "":
+            return True
+        pop = Popup(title='Nie zapisano raportu',
+                    content=Label(text=error),
+                    size_hint=(None, None), size=(400, 400))
+        pop.open()
+        return False

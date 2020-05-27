@@ -1,11 +1,14 @@
 <ReportListScreen>:
-    GridLayout:
-        cols: 1
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        size_hint: 1, 0.9
+        pos_hint: {'center_x': .5, 'center_y': .5}
         ScrollView:
-            size_hi9nt: 1, 0.
-            pos_hint: {"top": 1, "left": 1}
             do_scroll_x: False
             do_scroll_y: True
+            size_hint: 0.8, 1
+            pos_hint: {'center_x': .5, 'center_y': .5}
             GridLayout:
                 size_hint: (1, None)
                 height: self.minimum_height
@@ -18,8 +21,8 @@
                 #padding: 0, 5
         Button:
             text: "Powrót"
-            size_hint: 1, .1
-            pos_hint: {"top": .1, "right": 1}
+            size_hint: 0.7, .1
+            pos_hint: {"top": .1, "right": 0.85}
             markup: True
             on_release:
                 root.manager.transition.direction = 'right'

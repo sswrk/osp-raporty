@@ -1,5 +1,5 @@
-#:include firebaseloginscreen.kv
-#:import FirebaseLoginScreen firebaseloginscreen.FirebaseLoginScreen
+#:include firebaseauth.kv
+#:import FirebaseAuth FirebaseAuth.FirebaseAuth
 #:import MainMenu MainMenu.MainMenu
 #:import ReportScreen ReportScreen.ReportScreen
 #:import ReportListScreen ReportListScreen.ReportListScreen
@@ -7,9 +7,9 @@
 
 ScreenManager:
     id: screen_manager
-    FirebaseLoginScreen:
-        id: firebase_login_screen
-        name: "firebase_login_screen"
+    FirebaseAuth:
+        id: firebase_auth
+        name: "firebase_auth"
         web_api_key: "AIzaSyBMYdeS0QQOhsoHmCFzcerDsTgEcS_R0fg"
         on_login_success:
             app.user_localId = self.localId
