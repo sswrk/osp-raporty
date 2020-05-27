@@ -1,3 +1,0 @@
-abcxyz@gmail.com;1234;xyz;abc;2020-05-10
-random@gmail.com;1234;Pawel;Plawecki;2020-05-10
-@.;sad;sad;sad;2020-05-10
