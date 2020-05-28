@@ -10,10 +10,8 @@ ScreenManager:
     FirebaseAuth:
         id: firebase_auth
         name: "firebase_auth"
-        web_api_key: "AIzaSyBMYdeS0QQOhsoHmCFzcerDsTgEcS_R0fg"
-        on_login_success:
-            app.user_localId = self.localId
-            app.user_idToken = self.idToken
+        auth_key: "AIzaSyBMYdeS0QQOhsoHmCFzcerDsTgEcS_R0fg"
+        on_logged_in:
             root.current = "menu"
     MainMenu:
         id: menu
