@@ -2,7 +2,7 @@
     FloatLayout:
         Button:
             size_hint: .4, .05
-            pos_hint: {"center_x": .25, "top": .45}
+            pos_hint: {"center_x": .5, "top": .225}
             text: "Powrót"
             on_release:
                 root.parent.transition = SlideTransition(direction="right")
@@ -24,21 +24,10 @@
         Button:
             text: "Zarejestruj się"
             size_hint: .4 ,.05
-            pos_hint: {"center_x": .75, "top": .45}
+            pos_hint: {"center_x": .5, "top": .45}
             on_release:
                 root.parent.parent.sign_up(email.text, password.text)
                 sign_in_button.opacity = 0
                 sign_in_button.disabled = True
-        Button:
-            id: sign_in_button
-            text: "Zaloguj się"
-            size_hint: .2 ,.05
-            pos_hint: {"right": .85, "center_y": .1}
-            opacity: 0
-            disabled: True
-            on_release:
-                root.parent.current = "login_screen"
-                root.parent.parent.ids.sign_in_screen.ids.email.text = email.text
-                root.parent.parent.ids.sign_in_screen.ids.password.text = password.text
 
 
