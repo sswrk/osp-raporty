@@ -57,6 +57,8 @@ class FirebaseAuth(Screen, EventDispatcher):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.refresh_token_file = App.get_running_app().user_data_dir + "/refresh_token.txt"
+        if os.path.exists(self.refresh_token_file):
+            self.reload_user()
 
     def on_auth_key(self, *args):
         if os.path.exists(self.refresh_token_file):
@@ -70,7 +72,7 @@ class FirebaseAuth(Screen, EventDispatcher):
         if result.ok:
             self.login_success(json_result)
         else:
-            self.sign_up_failure(json_result)
+            self.login_failure(json_result)
 
     def login_success(self, log_in_data):
         self.refresh_token = log_in_data['refreshToken']
@@ -80,9 +82,9 @@ class FirebaseAuth(Screen, EventDispatcher):
         self.logged_in = True
         self.load_reports()
 
-    def sign_up_failure(self, failure_data):
+    def login_failure(self, failure_data):
         msg = failure_data['error']['message'].replace("_", " ").capitalize()
-        pop = Popup(title='Nie udało się zarejestrować',
+        pop = Popup(title='Nie udało się',
                     content=Label(text=msg),
                     size_hint=(None, None), size=(400, 400))
         pop.open()
@@ -95,14 +97,7 @@ class FirebaseAuth(Screen, EventDispatcher):
         if result.ok:
             self.login_success(json_result)
         else:
-            self.sign_in_failure(json_result)
-
-    def sign_in_failure(self, failure_data):
-        msg = failure_data['error']['message'].replace("_", " ").capitalize()
-        pop = Popup(title='Nie udało się zalogować',
-                    content=Label(text=msg),
-                    size_hint=(None, None), size=(400, 400))
-        pop.open()
+            self.login_failure(json_result)
 
     def reset_password(self, email):
         url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=" + self.auth_key
@@ -112,7 +107,7 @@ class FirebaseAuth(Screen, EventDispatcher):
         if result.ok:
             self.reset_success()
         else:
-            self.sign_in_failure(json_result)
+            self.login_failure(json_result)
 
     def reset_success(self):
         msg = "Wysłano e-mail z dalszymi instrukcjami"
