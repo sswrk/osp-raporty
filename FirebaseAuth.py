@@ -46,7 +46,7 @@ from LoginScreen import LoginScreen
 from RegisterScreen import RegisterScreen
 
 
-class FirebaseAuth(Screen, EventDispatcher):
+class FirebaseAuth(Screen):
 
     refresh_token = ""
     logged_in = BooleanProperty(False)
@@ -112,9 +112,9 @@ class FirebaseAuth(Screen, EventDispatcher):
     def reload_user(self):
         with open(self.refresh_token_file, "r") as f:
             self.refresh_token = f.read()
-        refresh_url = "https://securetoken.googleapis.com/v1/token?key=" + ConnectionInfo.auth_key
-        refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
-        UrlRequest(refresh_url, req_body=refresh_payload,
+        url = "https://securetoken.googleapis.com/v1/token?key=" + ConnectionInfo.auth_key
+        payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
+        UrlRequest(url, req_body=payload,
                    on_success=self.user_reload_success,
                    ca_file=certifi.where(), verify=True)
 
