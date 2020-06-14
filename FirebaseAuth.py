@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
-from kivy.properties import BooleanProperty, StringProperty
+from kivy.properties import BooleanProperty
 from kivy.event import EventDispatcher
 from kivy.network.urlrequest import UrlRequest
 from kivy.app import App
@@ -47,7 +47,6 @@ from RegisterScreen import RegisterScreen
 
 
 class FirebaseAuth(Screen, EventDispatcher):
-    auth_key = StringProperty()
 
     refresh_token = ""
     logged_in = BooleanProperty(False)
@@ -58,12 +57,8 @@ class FirebaseAuth(Screen, EventDispatcher):
         if os.path.exists(self.refresh_token_file):
             self.reload_user()
 
-    def on_auth_key(self, *args):
-        if os.path.exists(self.refresh_token_file):
-            self.reload_user()
-
     def sign_up(self, email, password):
-        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + self.auth_key
+        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + ConnectionInfo.auth_key
         payload = {"email": email, "password": password, "returnSecureToken": "true"}
         result = requests.post(url, json=payload)
         json_result = result.json()
@@ -88,7 +83,7 @@ class FirebaseAuth(Screen, EventDispatcher):
         pop.open()
 
     def sign_in(self, email, password):
-        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + self.auth_key
+        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + ConnectionInfo.auth_key
         payload = {"email": email, "password": password, "returnSecureToken": True}
         result = requests.post(url, json=payload)
         json_result = result.json()
@@ -98,7 +93,7 @@ class FirebaseAuth(Screen, EventDispatcher):
             self.login_failure(json_result)
 
     def reset_password(self, email):
-        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=" + self.auth_key
+        url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode?key=" + ConnectionInfo.auth_key
         payload = {"email": email, "requestType": "PASSWORD_RESET"}
         result = requests.post(url, json=payload)
         json_result = result.json()
@@ -117,7 +112,7 @@ class FirebaseAuth(Screen, EventDispatcher):
     def reload_user(self):
         with open(self.refresh_token_file, "r") as f:
             self.refresh_token = f.read()
-        refresh_url = "https://securetoken.googleapis.com/v1/token?key=" + self.auth_key
+        refresh_url = "https://securetoken.googleapis.com/v1/token?key=" + ConnectionInfo.auth_key
         refresh_payload = dumps({"grant_type": "refresh_token", "refresh_token": self.refresh_token})
         UrlRequest(refresh_url, req_body=refresh_payload,
                    on_success=self.user_reload_success,
