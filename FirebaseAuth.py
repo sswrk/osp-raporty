@@ -19,8 +19,6 @@ request_permissions([Permission.INTERNET,
                      Permission.READ_EXTERNAL_STORAGE])
 
 def override_where():
-    """ overrides certifi.core.where to return actual location of cacert.pem"""
-    # change this to match the location of cacert.pem
     return os.path.abspath("certifi/cacert.pem")
 
 import certifi
