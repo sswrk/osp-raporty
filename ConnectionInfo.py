@@ -7,3 +7,5 @@ def init():
     database_auth_key = '4jxwy5QOS3fItV8i69hEH15yRdBas0ps6oKNecFy'
     global reports
     reports = ""
+    global auth_key
+    auth_key = "AIzaSyBMYdeS0QQOhsoHmCFzcerDsTgEcS_R0fg"
